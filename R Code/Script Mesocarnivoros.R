@@ -17,7 +17,7 @@ write.bib(citation("overlap"))
 write.bib(citation("camtrapR"))
 write.bib(citation("activity"))
 write.bib(citation("circular"))
-
+write.bib(citation("dplyr"))
 
 # Import dataset
 raw_data <- read.csv("JPHO_phototraping_definitive.csv", skip = 18, header = T, sep = ";", as.is = T )
@@ -66,11 +66,9 @@ meso_data <- subset(raw_data, is.na(raw_data$Date_Time)==FALSE)
 # solartime() transforms clock time to solar time anchored to sun rise and sunset times for a given location.
 
 
-
-
 ?solartime
 solartime <- solartime(meso_data$Date_Time, lat= 37.0000000 , long= -6.3333300,tz= 1  ,"%Y-%m-%d %H:%M:%S")
-solartime # $solar: radian solar time data anchored to average sun rise and sun set times.
+solartime # $solar: radian solar time data anchored to average sunrise and sunset times.
 
 meso_data$solar <- solartime$solar
 meso_data$solar_input <- solartime$input
@@ -125,8 +123,8 @@ summary(perdiz$area)
 #                                                                                                                      #
 ########################################################################################################################
 
-# Activity Density plots for all species in dataset. WARNING: There is species in the dataset which number of detections are lower than 10
-# so their respective kernel density plot would not be well estimated.
+# Activity Density plots for all species in dataset. WARNING: There is species in the dataset which number of detections 
+# are lower than 10 so their respective kernel density plot would not be well estimated.
 
 levels(meso_data$binomial)
 
@@ -134,8 +132,9 @@ activityDensity(recordTable = meso_data, allSpecies = TRUE, speciesCol = "binomi
                 recordDateTimeFormat = "%Y-%m-%d %H:%M:%S", plotR = TRUE)
 
 
-# In order to estimate kernel density plots and get overlapping plots for each pair of sp we use activityOverlap from camtrapR package
-# Each specie has its colour:
+# In order to estimate kernel density plots and get overlapping plots for each pair of sp we use activityOverlap from 
+# camtrapR package
+# Each species has its colour:
 # Herpestes ichneumon: #F0E68C (yellow)
 # Vulpes vulpes: #4682B4 (blue)
 # Genetta genetta: #66CDAA (green)
@@ -250,7 +249,7 @@ overlapPlot(perdiz$solar, meles$solar, rug =T,linecol = c("#DAA520", "#9370DB"),
 # use when sample size < 50 and Dhat4 when sample size > 50. Thus, we need to check the number of detections for each sp and choose 
 # the appropiate coefficient related to the lower number of records from both species.
 
-# Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡Â¡  CAUTION !!!!!!!!!!!!!!!!!!!!
+# ¡¡¡¡¡¡¡¡¡¡¡¡¡¡  CAUTION !!!!!!!!!!!!!!!!!!!!
 
 # Function overlapEst from overlap package. Each vector has a code for each sp (Overlap_GV). Thus: Genneta = G, Vulpes = V, Meles = M, Herpestes = H
 # Calculating the overlap with the three estimators: Dthat 1 , 4 and 5 (choose one checking the sample size first)
